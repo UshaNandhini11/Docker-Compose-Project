@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: C:/Usha/Docker-compose_Container/demoapp
+    # image: demoapp:latest
+    ports:
+      - "3001:3000"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_BACKEND_URL=http://backend:8080
+    networks:
+      - app-network
+
+  backend:
+    # build: ../MyProject
+    image: springbootwithmongodb:latest
+    ports:
+      - "8081:8080"
+    depends_on:
+      - mongo_DB
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/ecommerce
+    networks:
+      - app-network
+
+  mongo_DB:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+
+
+volumes:
+  mongodb_data:
